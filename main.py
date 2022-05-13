@@ -10,10 +10,10 @@ import time
 from datetime import timedelta
 from progress_bar import progress, TimeFormatter, humanbytes
 
-bot_token = '5114686436:AAFYSfWThBG8zKryQKj788KafuNoSMVDzGM'
+bot_token = 'BOT_TOKEN'
 workers = 4
-api = '13182361'
-hash = 'a542535f15db8bacb176126c843edd76'
+api = 'TELEGRAM_API'
+hash = 'TELEGRAM_API_HASH'
 channel = 'https://t.me/+WK-z97ej_B04NTdi'
 BOT_URL = 'mylittlebtcusdbot'
 app = Client("BOT_Name", bot_token=bot_token, api_id=api, api_hash=hash, workers=workers)
