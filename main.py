@@ -3,13 +3,11 @@ import os
 import re
 import shutil
 import time
-from pyrogram import Client, filters
 import requests
 from aiogram.utils.executor import start_webhook
 from aiogram import types
 from config import bot, dp, WEBHOOK_PATH, WEBHOOK_URL, WEBAPP_PORT, WEBAPP_HOST, BOT_URL, API_HOST, API_KEY, app
 from db import database
-from progress_bar import progress, TimeFormatter, humanbytes
 
 
 async def on_startup(dispatcher):
@@ -37,16 +35,17 @@ async def read():
 @dp.message_handler(commands=['start', 'help'])
 async def start(message: types.Message):
     await save(message.from_user.id, message.text, message.from_user.first_name)
-    await message.reply(text=f"Hi, I am **TikTok Downloader Bot**. \nI can download TikTok video without Watermark.\n"
+    await message.reply(text=f"Hi, I am **TikTok Downloader Bot** \nI can download TikTok video without Watermark\n"
                              f"Just send me link on TikTok Video\n"
                              f"__**Developer :**__ __@otakukz17__\n"
                              "__**Language :**__ __Python__\n"
-                             "__**Framework :**__ __Aiogram",
-                        parse_mode='Markdown')
+                             "__**Framework :**__ __Aiogram__",
+                        parse_mode='MarkdownV2')
 
 
 @dp.message_handler(regexp='tiktok')
 async def tiktok_dl(message: types.Message):
+    await save(message.from_user.id, message.text, message.from_user.first_name)
     a = await message.answer(text='__Downloading File to the Server__')
     link = re.findall(r'\bhttps?://.*[(tiktok|douyin)]\S+', message.text)[0]
     link = link.split("?")[0]
@@ -61,6 +60,7 @@ async def tiktok_dl(message: types.Message):
     }
 
     response = requests.request("GET", url, headers=headers, params=querystring).json()['video'][0]
+    print(response)
     directory = str(round(time.time()))
     filename = str(int(time.time())) + '.mp4'
     size = int(requests.head(response).headers['Content-length'])
@@ -83,31 +83,27 @@ async def tiktok_dl(message: types.Message):
                     percent = 100
                 if show == 1:
                     try:
-                        await a.edit_text(f'__**URL :**__ __{message.text}__\n'
-                                          f'__**Total Size :**__ __{total_size} MB__\n'
-                                          f'__**Download :**__ __{percent}%__\n')
+                        await a.edit_text(text='__**URL :**__ __{message.text}__\n'
+                                               f'__**Total Size :**__ __{total_size} MB__\n'
+                                               f'__**Download :**__ __{percent}%__\n',
+                                          parse_mode='Markdown')
                     except:
                         pass
                     if percent == 100:
                         show = 0
-        await a.edit_text(f'__Downloaded to the server!\n'
-                          f'Uploading to Telegram Now __')
-        await message.reply_document(document=f"./{directory}/{filename}",
-                                     caption=f"**File: ** __{filename}__\n"
-                                             f"**Size :** __{total_size} MB__ \n\n"
-                                             f"__Uploaded by @{BOT_URL}__",)
+        await a.edit_text(text=f'__Downloaded to the server__\n'
+                               f'__Uploading to Telegram Now__',
+                          parse_mode='Markdown')
+        await bot.send_document(message.chat.id, open(f'./{directory}/{filename}', 'rb'),
+                                caption=f"**File: ** __{filename}__\n"
+                                        f"**Size :** __{total_size} MB__ \n\n"
+                                        f"__Uploaded by {BOT_URL}__",
+                                parse_mode='Markdown')
         await a.delete()
         try:
             shutil.rmtree(directory)
         except:
             pass
-
-
-# @dp.message_handler()
-# async def echo(message: types.Message):
-#     await save(message.from_user.id, message.text, message.from_user.first_name)
-#     messages = await read()
-#     await message.answer(messages)
 
 
 if __name__ == '__main__':
