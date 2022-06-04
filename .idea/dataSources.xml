@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="identifier.sqlite" uuid="1242fa98-011f-434d-a8b3-d71ab4c7242f">
-      <driver-ref>sqlite.xerial</driver-ref>
+    <data-source source="LOCAL" name="Heroku" uuid="bf944f00-73cd-4dae-9bbf-40c979865d52">
+      <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:identifier.sqlite</jdbc-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ec2-99-80-170-190.eu-west-1.compute.amazonaws.com:5432/d2ft00pfnmra64</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="bot" uuid="1cec9789-62da-4f78-b7d5-1d909debe733">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/bot.db</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-      <libraries>
-        <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.36.0.3/sqlite-jdbc-3.36.0.3.jar</url>
-        </library>
-      </libraries>
     </data-source>
   </component>
 </project>
