@@ -46,7 +46,8 @@ async def start(message: types.Message):
 @dp.message_handler(commands=['stats'])
 async def stats(message: types.Message):
     if message.from_user.id == 382587132:
-        await read()
+        messages = await read()
+        await message.answer(messages)
     else:
         await message.reply(text=f'You not admin 😉')
 
