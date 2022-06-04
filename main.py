@@ -56,8 +56,8 @@ async def tiktok_dl(message: types.Message):
     querystring = {"url": link}
 
     headers = {
-        "X-RapidAPI-Host": {API_HOST},
-        "X-RapidAPI-Key": {API_KEY}
+        "X-RapidAPI-Host": f'{API_HOST}',
+        "X-RapidAPI-Key": f'{API_KEY}'
     }
 
     response = await requests.request("GET", url, headers=headers, params=querystring)
@@ -92,15 +92,10 @@ async def tiktok_dl(message: types.Message):
                         show = 0
         await a.edit_text(f'__Downloaded to the server!\n'
                           f'Uploading to Telegram Now __')
-        start = time.time()
-        title = filename
         await message.reply_document(document=f"./{directory}/{filename}",
                                      caption=f"**File: ** __{filename}__\n"
                                              f"**Size :** __{total_size} MB__ \n\n"
-                                             f"__Uploaded by @{BOT_URL}__",
-                                     file_name=f"{directory}",
-                                     progress=progress,
-                                     progress_args=(a, start, title))
+                                             f"__Uploaded by @{BOT_URL}__",)
         await a.delete()
         try:
             shutil.rmtree(directory)
