@@ -1,8 +1,6 @@
 import logging
-import os
-from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
-from aiogram import Bot, types
+from aiogram import types
 from config import bot, dp, WEBHOOK_PATH, WEBHOOK_URL, WEBAPP_PORT, WEBAPP_HOST
 from db import database
 
@@ -24,9 +22,9 @@ async def save(user_id, text):
 
 async def read(user_id):
     results = await database.fetch_all('SELECT text '
-                                        'FROM messages '
-                                        'WHERE telegram_id = :telegram_id ',
-                                        values={'telegram_id': user_id})
+                                       'FROM messages '
+                                       'WHERE telegram_id = :telegram_id ',
+                                       values={'telegram_id': user_id})
     return [next(result.values()) for result in results]
 
 
@@ -35,8 +33,6 @@ async def echo(message: types.Message):
     await save(message.from_user.id, message.text)
     messages = await read(message.from_user.id)
     await message.answer(messages)
-
-
 
 
 if __name__ == '__main__':
