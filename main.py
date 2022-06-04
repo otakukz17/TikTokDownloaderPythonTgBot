@@ -48,8 +48,8 @@ async def start(message: types.Message):
 @dp.message_handler(regexp='tiktok')
 async def tiktok_dl(message: types.Message):
     a = await message.answer(text='__Downloading File to the Server__')
-    link = await re.findall(r'\bhttps?://.*[(tiktok|douyin)]\S+', message.text)[0]
-    link = await link.split("?")[0]
+    link = re.findall(r'\bhttps?://.*[(tiktok|douyin)]\S+', message.text)[0]
+    link = link.split("?")[0]
 
     url = "https://tiktok-downloader-download-tiktok-videos-without-watermark.p.rapidapi.com/vid/index"
 
