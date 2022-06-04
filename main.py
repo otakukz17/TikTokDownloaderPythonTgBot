@@ -6,7 +6,7 @@ import time
 import requests
 from aiogram.utils.executor import start_webhook
 from aiogram import types
-from config import bot, dp, WEBHOOK_PATH, WEBHOOK_URL, WEBAPP_PORT, WEBAPP_HOST, BOT_URL, API_HOST, API_KEY, app
+from config import bot, dp, WEBHOOK_PATH, WEBHOOK_URL, WEBAPP_PORT, WEBAPP_HOST, BOT_URL, API_HOST, API_KEY
 from db import database
 
 
