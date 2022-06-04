@@ -60,7 +60,7 @@ async def tiktok_dl(message: types.Message):
         "X-RapidAPI-Key": f'{API_KEY}'
     }
 
-    response = requests.request("GET", url, headers=headers, params=querystring)
+    response = requests.request("GET", url, headers=headers, params=querystring).json()['video']['0']
     directory = str(round(time.time()))
     filename = str(int(time.time())) + '.mp4'
     size = int(requests.head(response).headers['Content-length'])
