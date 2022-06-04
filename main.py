@@ -17,20 +17,31 @@ async def on_shutdown(dispatcher):
 
 async def save(user_id, text, first_name):
     await database.execute(f"INSERT INTO messages(telegram_id, text, username) "
-                           f"VALUES (:telegram_id, :text, :username)", values={'telegram_id': user_id, 'text': text, 'username': first_name})
+                           f"VALUES (:telegram_id, :text, :username)",
+                           values={'telegram_id': user_id, 'text': text, 'username': first_name})
 
 
 async def read():
     results = await database.fetch_all('SELECT text, username '
-                                       'FROM messages ')
+                                       'FROM messages;')
     return [next(result.values()) for result in results]
 
 
-@dp.message_handler()
-async def echo(message: types.Message):
-    await save(message.from_user.id, message.text, message.from_user.first_name)
-    messages = await read()
-    await message.answer(messages)
+@dp.message_handler(commands='start')
+async def start(message: types.Message):
+    await message.answer(text=f"Hi, I am **TikTok Downloader Bot**. \nI can download TikTok video without Watermark.\n"
+                              f"Just send me link on TikTok Video\n"
+                              f"__**Developer :**__ __@otakukz17__\n"
+                              "__**Language :**__ __Python__\n"
+                              "__**Framework :**__ __Aiogram",
+                         parse_mode='Markdown')
+
+
+# @dp.message_handler()
+# async def echo(message: types.Message):
+#     await save(message.from_user.id, message.text, message.from_user.first_name)
+#     messages = await read()
+#     await message.answer(messages)
 
 
 if __name__ == '__main__':
