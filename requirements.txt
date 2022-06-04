@@ -17,3 +17,4 @@ SQLAlchemy==1.4.31
 yarl==1.7.2
 requests~=2.27.1
 Pyrogram~=2.0.19
+tgcrypto==1.2.3

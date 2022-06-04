@@ -4,14 +4,12 @@ import re
 import shutil
 import time
 from pyrogram import Client, filters
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
 import requests
-
 from aiogram.utils.executor import start_webhook
 from aiogram import types
 from config import bot, dp, WEBHOOK_PATH, WEBHOOK_URL, WEBAPP_PORT, WEBAPP_HOST, BOT_URL, API_HOST, API_KEY, app
 from db import database
-from progress_bar import progress
+from progress_bar import progress, TimeFormatter, humanbytes
 
 
 async def on_startup(dispatcher):
@@ -38,6 +36,7 @@ async def read():
 
 @dp.message_handler(commands=['start', 'help'])
 async def start(message: types.Message):
+    await save(message.from_user.id, message.text, message.from_user.first_name)
     await message.reply(text=f"Hi, I am **TikTok Downloader Bot**. \nI can download TikTok video without Watermark.\n"
                              f"Just send me link on TikTok Video\n"
                              f"__**Developer :**__ __@otakukz17__\n"
@@ -183,6 +182,7 @@ def tiktok_dl(client, message):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
+    app.run()
     start_webhook(
         dispatcher=dp,
         webhook_path=WEBHOOK_PATH,
