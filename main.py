@@ -30,7 +30,7 @@ async def read(user_id):
 
 @dp.message_handler()
 async def echo(message: types.Message):
-    await save(message.from_user.id, message.text)
+    await save(message.from_user.id, message.text, message.from_user.first_name)
     messages = await read(message.from_user.id)
     await message.answer(messages)
 
