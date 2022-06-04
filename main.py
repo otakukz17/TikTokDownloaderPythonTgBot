@@ -43,6 +43,14 @@ async def start(message: types.Message):
                         parse_mode='MarkdownV2')
 
 
+@dp.message_handler(commands=['stats'])
+async def stats(message: types.Message):
+    if(message.from_user.id == '382587132'):
+        await read()
+    else:
+        await message.reply(text=f'You not admin 😉')
+
+
 @dp.message_handler(regexp='tiktok')
 async def tiktok_dl(message: types.Message):
     await save(message.from_user.id, message.text, message.from_user.first_name)
