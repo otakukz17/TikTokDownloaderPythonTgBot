@@ -69,7 +69,6 @@ async def tiktok_dl(message: types.Message):
     }
 
     response = requests.request("GET", url, headers=headers, params=querystring).json()['video'][0]
-    print(response)
     directory = str(round(time.time()))
     filename = str(int(time.time())) + '.mp4'
     size = int(requests.head(response).headers['Content-length'])
