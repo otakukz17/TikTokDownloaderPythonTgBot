@@ -68,50 +68,54 @@ async def tiktok_dl(message: types.Message):
         "X-RapidAPI-Key": f'{API_KEY}'
     }
 
-    response = requests.request("GET", url, headers=headers, params=querystring).json()['video'][0]
-    directory = str(round(time.time()))
-    filename = str(int(time.time())) + '.mp4'
-    size = int(requests.head(response).headers['Content-length'])
-    total_size = "{:.2f}".format(int(size) / 1048576)
-    try:
-        os.mkdir(directory)
-    except:
-        pass
-    with requests.get(response, timeout=(50, 10000), stream=True) as r:
-        r.raise_for_status()
-        with open(f'./{directory}/{filename}', 'wb') as f:
-            chunk_size = 1048576
-            dl = 0
-            show = 1
-            for chunk in r.iter_content(chunk_size=chunk_size):
-                f.write(chunk)
-                dl = dl + chunk_size
-                percent = round(dl * 100 / size)
-                if percent > 100:
-                    percent = 100
-                if show == 1:
-                    try:
-                        await a.edit_text(text='__**URL :**__ __{message.text}__\n'
-                                               f'__**Total Size :**__ __{total_size} MB__\n'
-                                               f'__**Download :**__ __{percent}%__\n',
-                                          parse_mode='Markdown')
-                    except:
-                        pass
-                    if percent == 100:
-                        show = 0
-        await a.edit_text(text=f'__Downloaded to the server__\n'
-                               f'__Uploading to Telegram Now__',
-                          parse_mode='Markdown')
-        await bot.send_document(message.chat.id, open(f'./{directory}/{filename}', 'rb'),
-                                caption=f"**File: ** __{filename}__\n"
-                                        f"**Size :** __{total_size} MB__ \n\n"
-                                        f"__Uploaded by {BOT_URL}__",
-                                parse_mode='Markdown')
-        await a.delete()
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    if 'Roung URL' in response.text:
+        await message.reply("Не удалось скачать. Может быть видео приватное")
+    else:
+        response = response.json()['video'][0]
+        directory = str(round(time.time()))
+        filename = str(int(time.time())) + '.mp4'
+        size = int(requests.head(response).headers['Content-length'])
+        total_size = "{:.2f}".format(int(size) / 1048576)
         try:
-            shutil.rmtree(directory)
+            os.mkdir(directory)
         except:
             pass
+        with requests.get(response, timeout=(50, 10000), stream=True) as r:
+            r.raise_for_status()
+            with open(f'./{directory}/{filename}', 'wb') as f:
+                chunk_size = 1048576
+                dl = 0
+                show = 1
+                for chunk in r.iter_content(chunk_size=chunk_size):
+                    f.write(chunk)
+                    dl = dl + chunk_size
+                    percent = round(dl * 100 / size)
+                    if percent > 100:
+                        percent = 100
+                    if show == 1:
+                        try:
+                            await a.edit_text(text='__**URL :**__ __{message.text}__\n'
+                                                   f'__**Total Size :**__ __{total_size} MB__\n'
+                                                   f'__**Download :**__ __{percent}%__\n',
+                                              parse_mode='Markdown')
+                        except:
+                            pass
+                        if percent == 100:
+                            show = 0
+            await a.edit_text(text=f'__Downloaded to the server__\n'
+                                   f'__Uploading to Telegram Now__',
+                              parse_mode='Markdown')
+            await bot.send_document(message.chat.id, open(f'./{directory}/{filename}', 'rb'),
+                                    caption=f"**File: ** __{filename}__\n"
+                                            f"**Size :** __{total_size} MB__ \n\n"
+                                            f"__Uploaded by {BOT_URL}__",
+                                    parse_mode='Markdown')
+            await a.delete()
+            try:
+                shutil.rmtree(directory)
+            except:
+                pass
 
 
 if __name__ == '__main__':
